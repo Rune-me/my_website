@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For You — BF Day Celebration 💖</title>
+  <style>
+    :root{
+      --bg: linear-gradient(180deg,#fff7fb,#f7fbff 60%);
+      --card:#ffffff;
+      --muted:#6b7280;
+      --accent:#ff9bb0;
+      --accent-2:#ffd6e0;
+      --accent-3:#dbefff;
+      --glass:rgba(255,255,255,0.7);
+      --shadow:0 10px 30px rgba(16,24,40,0.08);
+      --radius:18px;
+      --maxw:1000px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;background:var(--bg);color:#0f1724;display:flex;align-items:flex-start;justify-content:center;padding:28px;}
+
+    .wrap{width:100%;max-width:var(--maxw);}
+    header{display:flex;align-items:center;gap:16px;background:var(--card);padding:18px;border-radius:14px;box-shadow:var(--shadow);position:sticky;top:20px;z-index:60}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-3));display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;font-size:22px}
+    header h1{margin:0;font-size:20px}
+    header p{margin:0;color:var(--muted);font-size:13px}
+
+    /* Progress bar */
+    .progress{height:10px;background:linear-gradient(90deg,var(--accent),var(--accent-3));border-radius:20px;margin-top:12px;overflow:hidden}
+    .progress > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd6e0,#dbefff);transition:width 0.6s ease}
+
+    /* Page container */
+    .stage{position:relative;margin-top:18px;min-height:520px}
+    .page{position:absolute;inset:0;background:var(--card);border-radius:16px;padding:26px;box-shadow:var(--shadow);opacity:0;transform:translateY(24px) scale(.99);pointer-events:none;transition:all 520ms cubic-bezier(.2,.9,.3,1)}
+    .page.active{opacity:1;transform:translateY(0) scale(1);pointer-events:auto}
+
+    /* shared layout */
+    .cols{display:grid;grid-template-columns:1fr 340px;gap:18px}
+    .card{background:linear-gradient(180deg,var(--glass),#fff);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.6)}
+
+    /* gallery */
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .slot{background:#f7fafc;border-radius:12px;height:160px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;position:relative;border:1px dashed #f0f3f6}
+    .slot img{width:100%;height:100%;object-fit:cover}
+    .slot .hint{color:var(--muted);font-size:13px}
+
+    /* notes */
+    textarea{width:100%;min-height:180px;border-radius:10px;padding:12px;border:1px solid #e6eef8;font-size:15px}
+
+    /* buttons */
+    .controls{display:flex;gap:10px;align-items:center}
+    .btn{background:linear-gradient(180deg,#fff,#fff);border:1px solid #eee;padding:10px 14px;border-radius:12px;font-weight:600;cursor:pointer}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-3));color:#101827;border:none;box-shadow:0 8px 28px rgba(255,155,176,0.12);}
+
+    /* small decorative */
+    .small{font-size:13px;color:var(--muted)}
+oct35
+    /* animations: confetti, hearts, sparkles */
+    .effects{position:fixed;inset:0;pointer-events:none;z-index:10}
+    .confetti, .sparkle{position:absolute}
+
+    /* responsive */
+    @media (max-width:900px){.cols{grid-template-columns:1fr}.stage{min-height:680px}}
+
+    /* fun micro-animations */
+    .pulse{animation:pulse 2s infinite}
+    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+    .float{animation:floaty 6s ease-in-out infinite}
+    @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+
+    /* hint ribbon */
+    .ribbon{display:inline-block;background:var(--accent-2);padding:8px 12px;border-radius:999px;font-weight:700;color:#1f2937}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">Rouf♥︎</div>
+      <div>
+        <h1>For You — BF Day Celebration</h1>
+        <div class="progress" aria-hidden="true" style="margin-top:10px"><i id="progressFill" style="width:14%"></i></div>
+      </div>
+    </header>
+
+    <div class="stage">
+      <!-- Page 1: Welcome -->
+      <section class="page active" id="page1">
+        <div class="cols">
+          <div>
+            <h2 class="ribbon">Welcome</h2>
+            <h3 style="margin-top:10px">A little journey like Day just for you 💕</h3>
+            <p class="small" style="margin-top:8px">Turn the pages to find photos, notes, memories, and surprises — all made with love. Start with a tiny photo to get things going. Though we have really less captured memories.</p>
+
+            <div style="margin-top:16px" class="card">
+              <div style="display:flex;gap:10px;align-items:center;justify-content:space-between">
+                <div>
+                </div>
+                <div class="controls">
+                  <button class="btn" id="skipTo2">Skip</button>
+                  <button class="btn primary" data-next="2">Start ➜</button>
+                </div>
+              </div>
+              <div style="margin-top:12px" class="grid">
+                <div class="slot" ><div class="hint"><img src="photos/IMG_20251003_094910_405.jpg" alt=""></div></div>
+                <div class="slot" ><div class="hint"><img src="photos/IMG_20251003_095018_935.jpg" alt=""></div></div>
+                <div class="slot" ><div class="hint"><img src="photos/IMG_20251003_095031_911.jpg" alt=""></div></div>
+                <div class="slot" ><div class="hint"><img src="photos/IMG_20251003_095040_295.jpg" alt=""></div></div>
+              </div>
+            </div>
+          </div>
+          <aside>
+            <div class="card float">
+              <div style="display:flex;align-items:center;gap:10px">
+                <div style="width:64px;height:64px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-3));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700">Rouf♥︎</div>
+                <div>
+                  <div class="small">Today • Oct 3</div>
+                  <div style="font-weight:700;margin-top:6px">Happy BF Day</div>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Page 2: Timeline -->
+      <section class="page" id="page2">
+        <div class="cols">
+          <div>
+            <h2 class="ribbon">Our Timeline</h2>
+            <p class="small">A tiny timeline of moments. </p>
+
+            <div style="margin-top:12px" class="card">
+              <div style="display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;gap:12px;align-items:center">
+                  <div style="width:80px;height:80px;border-radius:10px;background:#fff;overflow:hidden" ><img src="photos/IMG_20251003_111156.jpg" alt=""></div>
+                  <div><strong>First day</strong><div class="small">Where it all began</div></div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:center">
+                  <div style="width:80px;height:80px;border-radius:10px;background:#fff;overflow:hidden" ><img src="photos/IMG-20250929-WA0009.jpg" alt=""></div>
+                  <div><strong>Favorite trip</strong><div class="small">That Train Journey</div></div>
+                </div>
+                <div style="display:flex;gap:12px;align-items:center">
+                  <div style="width:80px;height:80px;border-radius:10px;background:#fff;overflow:visible"><img src="photos/Screenshot_20251003_111502.jpg" alt=""></div>
+                  <div><strong>Silly moment</strong><div class="small">We laughed so hard</div></div>
+                </div>
+              </div>
+
+              <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
+                <button class="btn" data-prev="1">⬅ Back</button>
+                <button class="btn primary" data-next="3">Next ➜</button>
+              </div>
+            </div>
+          </div>
+
+          <aside>
+            <div class="card">
+              <div class="small">Memory Prompt</div>
+              <div style="margin-top:8px">We'll do it... For Haider</div>
+              <textarea id="timelineNote">I know it is getting hard and hard for us to keep holding on... I'm sure it'll be hard in the future too... But the thing is we just need to keep holding on and I guess everything will be sorted out... We have to do it... Remember our plans? For Haider? Okay? Just let's not forget our plans...
+              </textarea>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Page 3: Love Notes -->
+      <section class="page" id="page3">
+        <div class="cols">
+          <div>
+            <h2 class="ribbon">Love Notes</h2>
+            <div style="margin-top:12px" class="card">
+              <textarea id="loveNotes" >Just know that you are special and you deserve all the happiness there is and that I love you...</textarea>
+              <div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end">
+                <button class="btn" data-prev="2">⬅ Back</button>
+                <button class="btn" data-next="4">Next ➜</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Page 4: Playlist -->
+      <section class="page" id="page4">
+        <div class="cols">
+          <div>
+            <h2 class="ribbon">A Lil song</h2>
+            <div class="card" style="margin-top:12px">
+              <a href="https://youtu.be/lmhKXQBgEQU?si=bDsfcVUUr63CXCKJ" target="_blank">Click here to listen to something</a>
+              <div style="display:flex;gap:8px;margin-top:10px;justify-content:flex-end">
+                <button class="btn" data-prev="3">⬅ Back</button>
+                <button class="btn primary" data-next="5">Next ➜</button>
+              </div>
+              <ul id="playlist" style="margin-top:12px;padding-left:18px"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Page 5: Print & Card -->
+      <section class="page" id="page5">
+        <div class="cols">
+          <div>
+            <h2 class="ribbon">Card</h2>
+            <div class="card" style="margin-top:12px">
+              <textarea id="cardText">To my favorite person —
+
+You make every day brighter. Happy BF Day!</textarea>
+              <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+                <button class="btn" data-prev="4">⬅ Back</button>
+                <button class="btn primary" data-next="6">Next ➜</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+     
+
+      <!-- Page 7: Grand Finale -->
+      <section class="page" id="page6">
+        <div class="cols">
+          <div>
+            <h2 class="ribbon">Grand Finale</h2>
+            <p class="small">A final message and gallery of favorites.</p>
+            <div class="card" style="margin-top:12px">
+              <div id="finalMessage" style="font-size:18px;font-weight:700">You're my favorite — today and always. 💖</div>
+              <div style="margin-top:12px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+                <div class="slot" style="height:100px"><img src="photos/IMG_20251003_094903_902(1).jpg" alt=""></div>
+                <div class="slot" style="height:100px"><img src="photos/Screenshot_20251003_111502.jpg" alt=""></div>
+                <div class="slot" style="height:100px"><img src="photos/Screenshot_20251003_111522.jpg" alt=""></div>
+              </div>
+
+              <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
+                <button class="btn" data-prev="5">⬅ Back</button>
+                <button class="btn primary" id="confettiBtn">Done 🎉</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- global effects layer -->
+    <div class="effects" id="effects"></div>
+  </div>
+
+  <script>
+    // PAGE NAVIGATION (sequential)
+    const pages = Array.from(document.querySelectorAll('.page'));
+    const total = pages.length;
+    const progressFill = document.getElementById('progressFill');
+
+    function goTo(n){
+      pages.forEach(p=>p.classList.remove('active'));
+      const idx = Math.max(1,Math.min(total,n));
+      document.getElementById('page'+idx).classList.add('active');
+      progressFill.style.width = Math.round((idx/total)*100)+'%';
+      window.scrollTo({top:0,behavior:'smooth'});
+    }
+
+    document.querySelectorAll('[data-next]').forEach(b=>b.addEventListener('click',()=>goTo(Number(b.dataset.next))));
+    document.querySelectorAll('[data-prev]').forEach(b=>b.addEventListener('click',()=>goTo(Number(b.dataset.prev))));
+    document.getElementById('skipTo2').addEventListener('click',()=>goTo(2));
+
+    // PHOTO SLOTS: click to upload, and drag & drop
+    const slots = document.querySelectorAll('[data-slot]');
+    slots.forEach(s=>{
+      s.addEventListener('click',()=>{
+        const inp = document.createElement('input'); inp.type='file'; inp.accept='image/*';
+        inp.onchange = e=>{
+          const f = e.target.files[0]; if(!f) return;
+          const r = new FileReader(); r.onload = ev=>{ s.innerHTML = `<img src="${ev.target.result}" alt="mem">`; s.dataset.src = ev.target.result; };
+          r.readAsDataURL(f);
+        };
+        inp.click();
+      });
+
+      ['dragenter','dragover','dragleave','drop'].forEach(ev=>s.addEventListener(ev,e=>e.preventDefault()));
+      s.addEventListener('drop', e=>{
+        const f = e.dataTransfer.files[0]; if(!f || !f.type.startsWith('image/')) return;
+        const r = new FileReader(); r.onload = ev=>{ s.innerHTML = `<img src="${ev.target.result}" alt="mem">`; s.dataset.src = ev.target.result; };
+        r.readAsDataURL(f);
+      });
+    });
+
+    // RESET and DOWNLOAD snapshot (simple SVG snapshot)
+    document.getElementById('resetBtn').addEventListener('click',()=>{
+      slots.forEach(s=>{ s.innerHTML = '<div class="hint">click to add photo</div>'; delete s.dataset.src });
+    });
+
+    document.getElementById('downloadBtn').addEventListener('click',()=>{
+      const wrap = document.querySelector('.wrap');
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='${wrap.offsetWidth}' height='${wrap.offsetHeight}'><foreignObject width='100%' height='100%'>${new XMLSerializer().serializeToString(wrap)}</foreignObject></svg>`;
+      const blob = new Blob([svg],{type:'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='bf-day-snapshot.svg'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1500);
+    });
+
+    // Love notes saved locally
+    const saveNotes = document.getElementById('saveNotes');
+    const loveNotes = document.getElementById('loveNotes');
+    if(localStorage.getItem('bf_love_note')) loveNotes.value = localStorage.getItem('bf_love_note');
+    saveNotes.addEventListener('click',()=>{ localStorage.setItem('bf_love_note', loveNotes.value); alert('Saved locally — it will stay on this device.'); });
+
+    // Playlist (very simple list)
+    const addSong = document.getElementById('addSong');
+    const playlist = document.getElementById('playlist');
+    addSong.addEventListener('click', ()=>{
+      const v = document.getElementById('songInput').value.trim(); if(!v) return; const li = document.createElement('li'); li.textContent = v; playlist.appendChild(li); document.getElementById('songInput').value='';
+    });
+
+    // Download card to PNG using an SVG snapshot
+    document.getElementById('downloadCard').addEventListener('click', ()=>{
+      const text = document.getElementById('cardText').value;
+      const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='1200' height='800'><rect width='100%' height='100%' fill='#fff'/><foreignObject x='60' y='60' width='1080' height='680'><div xmlns='http://www.w3.org/1999/xhtml' style='font-family:Inter,system-ui,Arial;font-size:20px;color:#101827;padding:20px;box-sizing:border-box;'>${text.replace(/\n/g,"<br/>")}</div></foreignObject></svg>`;
+      const blob = new Blob([svg],{type:'image/svg+xml;charset=utf-8'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='bf-card.svg'; a.click(); setTimeout(()=>URL.revokeObjectURL(url),1500);
+    });
+
+    // Puzzle logic (simple order check)
+    const puzzleBtns = document.querySelectorAll('.puzzle');
+    const targetOrder = ['2','3','1','4']; // secret order
+    let attempt = [];
+    puzzleBtns.forEach(b=>b.addEventListener('click', ()=>{
+      attempt.push(b.dataset-idx);
+      if(attempt.length > targetOrder.length) attempt.shift();
+      if(attempt.join(',') === targetOrder.join(',')){
+        document.getElementById('puzzleHint').textContent = 'You found it! 🎉';
+        document.getElementById('finalMessage').textContent = 'Surprise! I love you more every day. — ❤️';
+        // small sparkle effect
+        launchSparkles();
+      }
+    }));
+
+    // Confetti / Sparkles effects
+    const effects = document.getElementById('effects');
+    function rand(min,max){ return Math.random()*(max-min)+min }
+
+    function launchConfetti(){
+      for(let i=0;i<60;i++){
+        const el = document.createElement('div'); el.className='confetti';
+        el.style.left = rand(10,90)+'%'; el.style.top = rand(0,40)+'%';
+        el.style.width = el.style.height = rand(8,14)+'px';
+        el.style.background = ['#ffd6e0','#ffd9a6','#dbefff','#ff9bb0'][Math.floor(Math.random()*4)];
+        el.style.position='absolute'; el.style.opacity=1; effects.appendChild(el);
+        // animate
+        const dur = rand(1200,2500);
+        el.animate([{transform:'translateY(0) rotate(0deg)',opacity:1},{transform:'translateY(400px) rotate(720deg)',opacity:0}],{duration:dur,iterations:1,easing:'cubic-bezier(.2,.8,.2,1)'});
+        setTimeout(()=>el.remove(),dur+20);
+      }
+    }
+    function launchSparkles(){
+      for(let i=0;i<18;i++){
+        const s = document.createElement('div'); s.className='sparkle';
+        s.style.left = rand(20,80)+'%'; s.style.top = rand(20,60)+'%'; s.style.width = s.style.height = rand(6,12)+'px';
+        s.style.borderRadius='50%'; s.style.background='#fff7f9'; s.style.boxShadow='0 0 18px rgba(255,150,180,0.8)'; effects.appendChild(s);
+        const dur = 800+Math.random()*700;
+        s.animate([{transform:'scale(0.2)',opacity:0},{transform:'scale(1)',opacity:1},{transform:'scale(0.6)',opacity:0}],{duration:dur,iterations:1});
+        setTimeout(()=>s.remove(),dur+40);
+      }
+    }
+
+    document.getElementById('confettiBtn').addEventListener('click', ()=>{ launchConfetti(); launchSparkles(); });
+
+    // small floating hearts follow and periodic hearts
+    const heartEmojis = ['💖','💕','💓','💗','💞','❤️'];
+    function createHeart(x,y,opts={duration:4500,size:18}){
+      const h = document.createElement('div'); h.className='heart'; h.textContent=heartEmojis[Math.floor(Math.random()*heartEmojis.length)];
+      h.style.left = (x||Math.random()*window.innerWidth)+'px'; h.style.top = (y||window.innerHeight)+'px'; h.style.fontSize = opts.size+'px';
+      h.style.animationDuration = (3+Math.random()*3)+'s'; effects.appendChild(h); setTimeout(()=>h.remove(),opts.duration);
+    }
+    setInterval(()=>createHeart(),600);
+    document.addEventListener('mousemove', (e)=>{ if(Math.random()<0.12) createHeart(e.clientX,e.clientY,{duration:2600,size:10+Math.random()*18}); });
+    document.addEventListener('click', (e)=>{ createHeart(e.clientX,e.clientY,{duration:800,size:28}); });
+
+    // small accessibility: keyboard next on Enter when focused on main areas
+    document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight'){ const cur = pages.findIndex(p=>p.classList.contains('active'))+1; goTo(Math.min(total,cur+1)); } if(e.key==='ArrowLeft'){ const cur = pages.findIndex(p=>p.classList.contains('active'))+1; goTo(Math.max(1,cur-1)); }});
+
+    // On load ensure progress matches
+    goTo(1);
+  </script>
+</body>
+</html>
